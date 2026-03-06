@@ -17,8 +17,6 @@ US3: As a platform engineer, I want incoming heterogeneous data to be converted 
 
 US4: As a platform engineer, I want normalized events to be published to an internal message broker, so that ingestion is decoupled from downstream processing.
 
-US5: As a habitat operator, I want the latest value of each sensor to be always available, so that I can monitor the current state of the habitat at any time.
-
 # Module 2: Automation Engine and State (The Brain)
 This section manages the logic. The mockup could be the rule creation screen or a log panel showing actuator activations.
 
