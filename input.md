@@ -22,9 +22,9 @@ US5: As a platform engineer, I want the ingestion service to detect and mark unr
 # Module 2: Automation Engine and State (The Brain)
 This section manages the logic. The mockup could be the rule creation screen or a log panel showing actuator activations.
 
-US5: As an automation engine, I want to keep the most recent state of each sensor in memory (cache) in order to always have the latest available value.
+US6: As an automation engine, I want to keep the most recent state of each sensor in memory (cache) in order to always have the latest available value.
 
-US6: As a user, I want to create automatic rules in the format
+US7: As a user, I want to create automatic rules in the format
 "IF [sensor] [operator] [value] THEN set [actuator] to [ON/OFF]",
 in order to automate the survival of the habitat.
 US7: As a user, I want my rules to be saved in a database so they are not lost if the system restarts.
