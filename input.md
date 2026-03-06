@@ -39,9 +39,13 @@ US10: As a user, I want to view a list of all active automation rules in the sys
 These are the most visual stories. The mockups will be actual user interface wireframes.
 
 US11: As a Martian operator, I want to view a real-time dashboard in order to monitor the overall status of the base.
+
 US12: As a user, I want to see the real-time value of a specific sensor (e.g., water tank level) through a dedicated widget.
+
 US13: As a user, I want to view a line chart for telemetry streams that continuously updates while the page is open.
+
 US14: As a user, I want to see the current state of actuators (e.g., whether the humidifier is ON or OFF) directly from the dashboard.
+
 US15: As a user, I want a toggle button on the dashboard to manually turn an actuator ON or OFF if necessary.
 
 
