@@ -48,6 +48,8 @@ US14: As a user, I want to see the current state of actuators (e.g., whether the
 
 US15: As a user, I want a toggle button on the dashboard to manually turn an actuator ON or OFF if necessary.
 
+US16: As a user, I want a dedicated interface to create and manage automation rules, so that I can implement IF-THEN logic (e.g., "IF greenhouse_temperature > 28 THEN turn ON cooling_fan") to ensure the habitat remains autonomous and safe without manual intervention.
+
 
 # Personas
 Habitat Operator: the person responsible for monitoring the habitat status through the dashboard and reacting to abnormal environmental conditions.
