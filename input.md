@@ -43,3 +43,8 @@ US12: As a user, I want to see the real-time value of a specific sensor (e.g., w
 US13: As a user, I want to view a line chart for telemetry streams that continuously updates while the page is open.
 US14: As a user, I want to see the current state of actuators (e.g., whether the humidifier is ON or OFF) directly from the dashboard.
 US15: As a user, I want a toggle button on the dashboard to manually turn an actuator ON or OFF if necessary.
+
+
+# Personas
+Habitat Operator: the person responsible for monitoring the habitat status through the dashboard and reacting to abnormal environmental conditions.
+Platform Engineer: the person responsible for designing and maintaining the internal automation platform, including data ingestion, normalization, and event distribution.
