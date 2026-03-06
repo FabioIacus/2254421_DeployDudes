@@ -7,7 +7,7 @@ Failure means thermodynamic consequences.
 # USER STORIES:
 
 # Module 1: Data Ingestion and Normalization (The Ingestion)
-These stories describe how the system acquires data. In the mockup, you could design a dashboard panel that shows the "Connection" status of the various sensors.
+These stories describe how the system acquires data.
 
 US1: As a habitat operator, I want the platform to poll REST sensors at regular intervals, so that environmental data such as temperature and pressure is collected continuously.
 
@@ -20,14 +20,11 @@ US4: As a platform engineer, I want normalized events to be published to an inte
 US5: As a platform engineer, I want the ingestion service to detect and mark unreachable REST sensors, so that polling failures can be handled without stopping the data collection pipeline.
 
 # Module 2: Automation Engine and State (The Brain)
-This section manages the logic. The mockup could be the rule creation screen or a log panel showing actuator activations.
+This section manages the logic.
 
 US6: As an automation engine, I want to keep the most recent state of each sensor in memory (cache) in order to always have the latest available value.
 
-US7: As a user, I want to create automatic rules in the format
-"IF [sensor] [operator] [value] THEN set [actuator] to [ON/OFF]",
-in order to automate the survival of the habitat.
-US7: As a user, I want my rules to be saved in a database so they are not lost if the system restarts.
+US7: As a user, I want to create automatic rules in the format "IF [sensor] [operator] [value] THEN set [actuator] to [ON/OFF]", in order to automate the survival of the habitat, and that will be saved in the database
 
 US8: As an automation engine, I want to dynamically evaluate rules whenever a new event arrives in order to determine whether an emergency action must be triggered.
 
@@ -36,7 +33,7 @@ US9: As a system, I want to send a POST request to the simulator when a rule is 
 US10: As a user, I want to view a list of all active automation rules in the system.
 
 # Module 3: Real-Time Dashboard (The Frontend)
-These are the most visual stories. The mockups will be actual user interface wireframes.
+These are the most visual stories.
 
 US11: As a Martian operator, I want to view a real-time dashboard in order to monitor the overall status of the base.
 
