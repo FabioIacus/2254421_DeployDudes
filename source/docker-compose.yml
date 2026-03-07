@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # MARS IOT SIMULATOR
+  simulator:
+    image: mars-iot-simulator:multiarch_v1 # Immage from .tar
+    ports:
+      - "8080:8080" # Endpoint for polling e actuators
+    networks:
+      - mars_network
+
+  # MESSAGE BROKER
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"   # Port for AMQP communication
+      - "15672:15672" # Port for Web Dashboard by RabbitMQ
+    networks:
+      - mars_network
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # THE AUTOMATION ENGINE
+  engine:
+    build: 
+      context: ./engine
+    ports:
+      - "8000:8000" # Port for API frontend
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - SIMULATOR_URL=http://simulator:8080/api/actuators
+    networks:
+      - mars_network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy # Wait RabbitMQ to be ready
+      simulator:
+        condition: service_started
+
+  # INGESTION
+  ingestion:
+    build: ./ingestion
+     environment:
+       - RABBITMQ_HOST=rabbitmq
+       - SIMULATOR_URL=http://simulator:8080
+     networks:
+       - mars_network
+     depends_on:
+       - rabbitmq
+
+  # DASHBOARD
+   frontend:
+     build: ./frontend
+     ports:
+       - "3000:3000"
+     networks:
+       - mars_network
+     depends_on:
+       - engine
+
+networks:
+  mars_network:
+    driver: bridge
