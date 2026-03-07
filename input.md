@@ -39,7 +39,7 @@ US10: As a habitat operator, I want to view a list of all active automation rule
 # Module 3: Real-Time Dashboard (The Frontend)
 These are the most visual stories.
 
-US11: As a Martian operator, I want to view a real-time dashboard in order to monitor the overall status of the base.
+US11: As a user, I want to view a real-time dashboard in order to monitor the overall status of the base.
 
 US12: As a user, I want to see the real-time value of a specific sensor (e.g., water tank level) through a dedicated widget.
 
@@ -49,7 +49,7 @@ US14: As a user, I want to see the current state of actuators (e.g., whether the
 
 US15: As a user, I want a toggle button on the dashboard to manually turn an actuator ON or OFF if necessary.
 
-US16: As a Martian operator, I want a dedicated interface with form inputs to create IF-THEN logic rules.
+US16: As a user, I want a dedicated interface with form inputs to create IF-THEN logic rules.
 
 # System Overview
 
