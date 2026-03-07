@@ -26,15 +26,15 @@ US5: As a platform engineer, I want the ingestion service to detect and mark unr
 # Module 2: Automation Engine and State (The Brain)
 This section manages the logic.
 
-US6: As an automation engine, I want to keep the most recent state of each sensor in memory (cache) in order to always have the latest available value.
+US6: As a system administrator, I want the system to cache the most recent state of each sensor in memory, to always have the latest value for rapid evaluation.
 
-US7: As a user, I want to create automatic rules in the format "IF [sensor] [operator] [value] THEN set [actuator] to [ON/OFF]", in order to automate the survival of the habitat, and that will be saved in the database
+US7: As a system administrator, I want the automation rules to be persisted in a database, so that they survive system restarts.
 
-US8: As an automation engine, I want to dynamically evaluate rules whenever a new event arrives in order to determine whether an emergency action must be triggered.
+US8: As a platform engineer, I want rules to be dynamically evaluated whenever a new event arrives to trigger emergencies.
 
-US9: As a system, I want to send a POST request to the simulator when a rule is satisfied in order to change the actuator state (e.g., turn on cooling_fan).
+US9: As a platform engineer, I want the system to send a POST request to the simulator when a rule is satisfied to change actuator states.
 
-US10: As a user, I want to view a list of all active automation rules in the system.
+US10: As a habitat operator, I want to view a list of all active automation rules in the system.
 
 # Module 3: Real-Time Dashboard (The Frontend)
 These are the most visual stories.
@@ -49,7 +49,7 @@ US14: As a user, I want to see the current state of actuators (e.g., whether the
 
 US15: As a user, I want a toggle button on the dashboard to manually turn an actuator ON or OFF if necessary.
 
-US16: As a user, I want a dedicated interface to create and manage automation rules, so that I can implement IF-THEN logic (e.g., "IF greenhouse_temperature > 28 THEN turn ON cooling_fan") to ensure the habitat remains autonomous and safe without manual intervention.
+US16: As a Martian operator, I want a dedicated interface with form inputs to create IF-THEN logic rules.
 
 # System Overview
 
