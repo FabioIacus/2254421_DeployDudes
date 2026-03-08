@@ -38,7 +38,7 @@ The bottom section highlights the REST polling mechanism by showing auto-refresh
 
 ### Mockup
 
-![US2 mockup](.US2.png)
+![US2 mockup](./US2.png)
 
 ### Textual description
 
@@ -62,7 +62,7 @@ The bottom section highlights the telemetry streaming mechanism by showing conne
 
 ### Mockup
 
-![US3 mockup](.US3.png)
+![US3 mockup](./US3.png)
 
 ### Textual description
 
@@ -86,7 +86,7 @@ The right side of the mockup highlights the unified output event schema used by 
 
 ### Mockup
 
-![US4 mockup](.US4.png)
+![US4 mockup](./US4.png)
 
 ### Textual description
 
@@ -110,7 +110,7 @@ The right side of the mockup highlights independent downstream consumers such as
 
 ### Mockup
 
-![US5 mockup](.US5.png)
+![US5 mockup](./US5.png)
 
 ### Textual description
 
