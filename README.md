@@ -1,6 +1,7 @@
 # MarsOps Habitat Control
 
-An event-driven, microservices-based IoT platform designed to ensure the survivability of a simulated Martian habitat. Developed as the final project for the Software Architectures course.
+An event-driven, microservices-based IoT platform designed to ensure the survivability of a simulated Martian habitat. 
+Developed as the final project for the Laboratory of Advanced Programming course.
 
 ## Quick Start
 1. Load simulator image (once):
