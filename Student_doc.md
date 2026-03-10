@@ -58,12 +58,11 @@ US16: As a user, I want a dedicated interface with form inputs to create IF-THEN
 
 ### MICROSERVICE: `Ingestion`
 * **TYPE:** backend
-* **DESCRIPTION:** [Compagno 1: Insert brief description - e.g., Connects to the simulator, normalizes REST/WebSocket data into the Unified Event Schema, and publishes to RabbitMQ.]
-* **PORTS:** None
-* **TECHNOLOGICAL SPECIFICATION:** [Compagno 1: Insert Tech - e.g., Node.js / Python]
-* **SERVICE ARCHITECTURE:** REST/SSE Client + AMQP Publisher.
-* **ENDPOINTS:** None (Acts only as a client/publisher).
-
+* **DESCRIPTION:** Asynchronous ingestion worker responsible for collecting data from the Mars IoT simulator. It periodically polls REST sensors and continuously subscribes to telemetry streams via SSE, normalizes heterogeneous payloads into the internal unified event schema, and publishes the resulting events to RabbitMQ. It also detects temporarily unreachable REST sensors and retries automatically without stopping the pipeline.
+* **PORTS:** None exposed externally. The service runs as an internal worker in Docker Compose.
+* **TECHNOLOGICAL SPECIFICATION:** Python 3.11, `httpx` for REST polling and SSE streaming, `aio-pika` for AMQP publishing, JSON-based normalization logic.
+* **SERVICE ARCHITECTURE:** Async worker service composed of: REST polling client, SSE telemetry subscriber, normalization layer, and AMQP publisher. The service connects to the simulator as a data source and to RabbitMQ as an event producer. It implements retry/reconnect logic for both RabbitMQ startup and telemetry stream interruptions.
+* **ENDPOINTS:** None (acts only as a client/producer, not as an HTTP server).
 ---
 
 ### MICROSERVICE: `Engine`
