@@ -14,7 +14,7 @@ This booklet collects the LoFi mockups and the related textual descriptions for 
 
 ### Mockup
 
-![US1 mockup – REST sensor polling dashboard](./US1.png)
+![US1 mockup – REST sensor polling dashboard](assets/US1.png)
 
 ### Textual description
 
@@ -38,7 +38,7 @@ The bottom section highlights the REST polling mechanism by showing auto-refresh
 
 ### Mockup
 
-![US2 mockup](./US2.png)
+![US2 mockup](assets/US2.png)
 
 ### Textual description
 
@@ -62,7 +62,7 @@ The bottom section highlights the telemetry streaming mechanism by showing conne
 
 ### Mockup
 
-![US3 mockup](./US3.png)
+![US3 mockup](assets/US3.png)
 
 ### Textual description
 
@@ -86,7 +86,7 @@ The right side of the mockup highlights the unified output event schema used by 
 
 ### Mockup
 
-![US4 mockup](./US4.png)
+![US4 mockup](assets/US4.png)
 
 ### Textual description
 
@@ -110,7 +110,7 @@ The right side of the mockup highlights independent downstream consumers such as
 
 ### Mockup
 
-![US5 mockup](./US5.png)
+![US5 mockup](assets/US5.png)
 
 ### Textual description
 
@@ -123,3 +123,113 @@ The central section highlights the failure detection logic of the ingestion serv
 - **Reliability:** polling failures are detected and isolated without causing a complete ingestion service stop.
 - **Fault tolerance:** the pipeline continues processing reachable sensors even when one REST source becomes unavailable.
 - **Observability:** sensor reachability, polling results, and failure events are clearly visible to the platform engineer.
+
+### US6 – In-Memory Sensor State Caching
+
+#### User story
+
+> As a system administrator, I want the system to cache the most recent state of each sensor in memory, to always have the latest value for rapid evaluation.
+
+#### Mockup
+
+![US6 mockup](assets/US6.png)
+
+#### Textual description
+
+This LoFi mockup represents a "Live System State" panel within the operator dashboard. The interface displays a grid of currently active sensors alongside a system metric widget showing "Cache Read Latency" (e.g., < 1ms). Instead of showing loading spinners typical of database queries, the sensor values appear instantaneously.
+
+The design highlights that the data is being served directly from the Engine's RAM (in-memory dictionary) rather than disk storage, ensuring that the automation logic always has zero-latency access to the absolute latest telemetry data.
+
+#### Non-functional aspects highlighted
+
+- Performance: ultra-low latency reads ensure immediate data availability.
+- Efficiency: eliminates heavy database I/O operations for constantly changing telemetry.
+- Scalability: the memory footprint remains small since only the latest state is kept, rather than a full historical log.
+
+### US7 – Automation Rule Persistence
+
+#### User story
+
+> As a system administrator, I want the automation rules to be persisted in a database, so that they survive system restarts.
+
+#### Mockup
+
+![US7 mockup](assets/US7.png)
+
+#### Textual description
+
+This LoFi mockup illustrates the backend reliability of the rule management system. The interface shows a list of configured automation rules with a prominent "Saved to SQLite Database" status indicator next to each entry.
+
+A secondary panel simulates a "System Restart" event. The mockup clearly demonstrates that after the Engine container goes offline and comes back online, the rules table immediately repopulates without any data loss. This guarantees that critical life-support logic is never lost during unexpected outages or routine maintenance.
+
+#### Non-functional aspects highlighted
+
+- Reliability: critical system logic survives infrastructure crashes.
+- Resilience: automatic recovery of the habitat's behavior without human intervention.
+- Data Integrity: ensures that configurations saved by the operator are permanently stored on disk.
+
+### US8 – Event-Driven Rule Evaluation
+
+#### User story
+
+> As a platform engineer, I want rules to be dynamically evaluated whenever a new event arrives to trigger emergencies.
+
+#### Mockup
+
+![US8 mockup](assets/US8.png)
+
+#### Textual description
+
+This LoFi mockup depicts a real-time system log or evaluation timeline. The interface is split into two halves: the left side shows a stream of incoming JSON events arriving from the RabbitMQ broker, and the right side shows the Automation Engine's evaluation engine.
+
+When a critical event arrives (e.g., greenhouse_temperature: 35.0), a visual lightning bolt or "Match" icon instantly flashes on the screen connecting the incoming event to a specific persisted rule. It visually emphasizes that the system reacts push-style (instantly upon message consumption) rather than pull-style (waiting for a periodic timer to check the database).
+
+#### Non-functional aspects highlighted
+
+- Responsiveness: immediate reaction to critical environmental changes.
+- Architectural Decoupling: the evaluation is triggered entirely by asynchronous messages.
+- Traceability: the operator can see exactly which event triggered which rule in real-time.
+
+### US9 – Automated Actuator Triggering
+
+#### User story
+
+> As a platform engineer, I want the system to send a POST request to the simulator when a rule is satisfied to change actuator states.
+
+#### Mockup
+
+![US9 mockup](assets/US9.png)
+
+#### Textual description
+
+This LoFi mockup represents the "Hardware Execution" view of the dashboard. It shows a visual representation of a Martian actuator, such as a Cooling Fan.
+
+The interface captures the exact moment an automation rule is satisfied. A system notification pops up stating "Condition Met: Sending HTTP POST to /api/actuators/cooling_fan". Immediately after, the UI reflects the actuator's status changing autonomously from OFF to ON. This demonstrates the closed-loop nature of the system, where software logic successfully interfaces with the external physical (simulated) world.
+
+#### Non-functional aspects highlighted
+
+- System Autonomy: the habitat self-regulates without requiring human clicks.
+- Interoperability: standardized REST communication is used to command external services.
+- Feedback: clear visual confirmation that the software command has been dispatched.
+
+### US10 – Active Rules Dashboard
+
+#### User story
+
+> As a habitat operator, I want to view a list of all active automation rules in the system.
+
+#### Mockup
+
+![US10 mockup](assets/US10.png)
+
+#### Textual description
+
+This LoFi mockup showcases the "Rule Management" page. The interface provides a clean, easily readable tabular layout displaying all active IF-THEN rules fetched from the backend API (GET /rules).
+
+Each row represents a single rule, clearly breaking down the logic into columns: Rule ID, Target Sensor, Logical Operator (e.g., >, <), Threshold Value, and Target Actuator State. The design prioritizes readability, allowing an operator to audit the habitat's safety protocols at a single glance. It may also include a "Delete" button next to each rule for full lifecycle management.
+
+#### Non-functional aspects highlighted
+
+- Usability: complex JSON logic is translated into a human-readable table.
+- Transparency: operators have full visibility into the system's automated behaviors.
+- Manageability: provides a centralized hub for auditing life-support configurations.
