@@ -4,6 +4,7 @@ Below are two complementary architectural views: a Deployment diagram (Container
 ## Deployment & Component Diagram
 This diagram illustrates the microservices infrastructure within the isolated Docker network (mars_network). It shows the physical decoupling between modules and the ports exposed to the host.
 
+```mermaid
 flowchart TB
     subgraph "External Environment"
         Simulator["Mars IoT Simulator\n(Sensors & Actuators)"]
