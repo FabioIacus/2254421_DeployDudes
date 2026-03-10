@@ -1,0 +1,56 @@
+# Architecture Diagrams
+Below are two complementary architectural views: a Deployment diagram (Containers and Network) and a Sequence diagram (Event Flow and Actuation).
+
+## Deployment & Component Diagram
+This diagram illustrates the microservices infrastructure within the isolated Docker network (mars_network). It shows the physical decoupling between modules and the ports exposed to the host.
+
+flowchart TB
+    subgraph "External Environment"
+        Simulator["Mars IoT Simulator\n(Sensors & Actuators)"]
+    end
+
+    subgraph "Data Ingestion & Messaging"
+        Ingestion["Ingestion Service\n(Polls Simulator)"]
+        Broker["RabbitMQ\n(Message Broker)"]
+    end
+
+    subgraph "Automation Engine (FastAPI)"
+        BrokerClient["broker.py\n(RabbitMQ Consumer)"]
+        RuleLogic["logic.py & state.py\n(Rule Evaluation & State)"]
+        DBManager["db.py\n(SQLite Settings)"]
+        API["engine.py\n(REST API Endpoints)"]
+        
+        BrokerClient -->|"Telemetry Data"| RuleLogic
+        RuleLogic <-->|"Read/Check Rules"| DBManager
+        API <-->|"Manage Rules/Get State"| RuleLogic
+        API <-->|"CRUD Rules"| DBManager
+    end
+
+    subgraph "Storage"
+        SQLite[("rules.db\n(SQLite)")]
+    end
+
+    subgraph "User Interface"
+        Frontend["Frontend Dashboard\n(React/Next.js)"]
+    end
+
+    %% External Connections
+    Simulator -- "HTTP GET\nSensor Data" --> Ingestion
+    Ingestion -- "AMQP Publish" --> Broker
+    Broker -- "AMQP Consume" --> BrokerClient
+    
+    RuleLogic -- "HTTP POST\nActuator Commands" --> Simulator
+    
+    DBManager <--> SQLite
+    
+    Frontend <-->|"HTTP GET / POST / DELETE\n(Manage Rules, Live Status)"| API
+    
+    classDef external fill:#f9f9f9,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5;
+    classDef core fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
+    classDef storage fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
+    classDef ui fill:#e8f5e9,stroke:#388e3c,stroke-width:2px;
+    
+    class Simulator external;
+    class Ingestion,Broker,BrokerClient,RuleLogic,DBManager,API core;
+    class SQLite storage;
+    class Frontend ui;
