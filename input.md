@@ -345,30 +345,7 @@ Examples:
 - `IF entrance_humidity < 35 THEN set entrance_humidifier to ON`
 - `IF corridor_pressure < 95 THEN set hall_ventilation to OFF`
 
-## Rule Semantics
-
-A rule is evaluated when a new sensor value is consumed by the automation engine.
-
-The condition part is matched using:
-- the sensor name
-- the comparison operator
-- the threshold value
-
-If the condition evaluates to true, the platform triggers the corresponding actuator command by sending a REST POST request to the simulator.
-
-## Rule Persistence
-
-Rules are persisted in a SQLite database so that they survive service restarts.
-
-A stored rule contains:
-- rule identifier
-- sensor_name
-- operator
-- threshold_value
-- actuator_name
-- actuator_state (`ON` or `OFF`)
-
-## Rule Evaluation Model
+## Rule Semantics and Evaluation Model
 
 Rules are evaluated on event arrival, not through periodic scans.
 
@@ -377,3 +354,45 @@ Operationally:
 - the latest in-memory sensor cache is updated
 - all rules associated with that sensor are checked
 - matching rules trigger actuator updates
+
+The system is based on a reactive architecture. A rule is evaluated exclusively when a new sensor value is consumed by the Automation Engine, and not through periodic database scans.
+
+Operationally, the flow is as follows:
+
+1. A new sensor value is consumed from the message broker (RabbitMQ).
+
+2. The latest in-memory sensor cache (RAM) is instantly updated with the new value.
+
+3. All persisted rules specifically associated with that sensor are checked.
+
+4. If the condition (sensor value) (operator) (threshold) evaluates to true, the platform triggers the corresponding actuator command by sending an asynchronous REST POST request to the simulator.
+
+# Rule Persistence
+
+Rules are persisted in an embedded SQLite database so that they survive service restarts. A stored rule contains:
+
+- rule_id (Unique identifier)
+
+- sensor_name
+
+- operator
+
+- threshold_value
+
+- actuator_name
+
+- actuator_state (ON or OFF)
+
+## Rule Schema
+
+The frontend uses this JSON schema to create or update automation rules via the REST APIs exposed by the engine (on port 8000).
+
+Rule Creation Request (POST /rules):
+
+{
+  "sensor_name": "greenhouse_temperature",
+  "operator": ">",
+  "threshold_value": 28.0,
+  "actuator_name": "cooling_fan",
+  "actuator_state": "ON"
+}
