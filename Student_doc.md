@@ -96,7 +96,7 @@ US16: As a user, I want a dedicated interface with form inputs to create IF-THEN
 
 ### MICROSERVICE: `Frontend`
 * **TYPE:** frontend
-* **DESCRIPTION:** Un pannello di controllo in tempo reale (Real-Time Dashboard) progettato per fornire consapevolezza situazionale agli operatori marziani. Include la visualizzazione live della telemetria, il controllo manuale degli attuatori dell'habitat e un costruttore interattivo di regole (IF-THEN) per l'automazione.
+* **DESCRIPTION:** A real-time dashboard designed to provide situational awareness to Mars habitat operators. It includes live telemetry visualization, manual control of habitat actuators, and an interactive IF-THEN rule builder for automation management.
 * **PORTS:** `3000:3000`
-* **TECHNOLOGICAL SPECIFICATION:** React 18 (con Vite), Tailwind CSS per la stilizzazione dell'interfaccia e Recharts per la generazione dei grafici dinamici.
-* **SERVICE ARCHITECTURE:** Client-side Single Page Application (SPA) che consuma API REST per il polling dei sensori, l'invio di comandi agli attuatori, la gestione delle regole e la ricezione in tempo reale dei dati telemetrici.
+* **TECHNOLOGICAL SPECIFICATION:** React 18 (with Vite), Tailwind CSS for UI styling, and Recharts for dynamic chart rendering.
+* **SERVICE ARCHITECTURE:** Client-side Single Page Application (SPA) that consumes the Engine REST APIs for state polling, actuator command dispatching, rule management, and periodic retrieval of telemetry data.
