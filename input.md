@@ -4,10 +4,6 @@ We are in 2036. After a 12-hour shift of questionable architectural decisions at
 Our mission: rebuild a distributed automation platform capable of ingesting heterogeneous sensor data, normalizing it into a unified internal representation, evaluating simple automation rules, and providing a real-time dashboard for habitat monitoring.
 Failure means thermodynamic consequences.
 
-# Personas
-Habitat Operator: the person responsible for monitoring the habitat status through the dashboard and reacting to abnormal environmental conditions.
-Platform Engineer: the person responsible for designing and maintaining the internal automation platform, including data ingestion, normalization, and event distribution.
-
 # USER STORIES:
 
 # Module 1: Data Ingestion and Normalization (The Ingestion)
