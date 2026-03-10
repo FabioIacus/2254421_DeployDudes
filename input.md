@@ -321,3 +321,58 @@ The field `last_state` is not treated as a numeric sensor measurement. It can be
   "status": "ok",
   "raw_type": "rest.scalar.v1"
 }
+
+# Rule Model
+
+The platform supports simple event-triggered automation rules.
+
+## Rule Syntax
+
+Rules follow the model:
+
+`IF <sensor_name> <operator> <value> THEN set <actuator_name> to ON | OFF`
+
+Supported operators:
+- `<`
+- `<=`
+- `=`
+- `>`
+- `>=`
+
+Examples:
+- `IF greenhouse_temperature > 28 THEN set cooling_fan to ON`
+- `IF entrance_humidity < 35 THEN set entrance_humidifier to ON`
+- `IF corridor_pressure < 95 THEN set hall_ventilation to OFF`
+
+## Rule Semantics
+
+A rule is evaluated when a new sensor value is consumed by the automation engine.
+
+The condition part is matched using:
+- the sensor name
+- the comparison operator
+- the threshold value
+
+If the condition evaluates to true, the platform triggers the corresponding actuator command by sending a REST POST request to the simulator.
+
+## Rule Persistence
+
+Rules are persisted in a SQLite database so that they survive service restarts.
+
+A stored rule contains:
+- rule identifier
+- sensor_name
+- operator
+- threshold_value
+- actuator_name
+- actuator_state (`ON` or `OFF`)
+
+## Rule Evaluation Model
+
+Rules are evaluated on event arrival, not through periodic scans.
+
+Operationally:
+- a new sensor value is consumed from the broker
+- the latest in-memory sensor cache is updated
+- all rules associated with that sensor are checked
+- matching rules trigger actuator updates
