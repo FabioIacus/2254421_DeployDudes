@@ -321,6 +321,7 @@ The field `last_state` is not treated as a numeric sensor measurement. It can be
   "status": "ok",
   "raw_type": "rest.scalar.v1"
 }
+```
 
 # Rule Model
 
