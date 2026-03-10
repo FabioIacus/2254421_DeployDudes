@@ -161,4 +161,62 @@ flowchart TD
     
     C_Ingest -- "HTTP Polling & SSE<br/>(http://simulator:8080)" --> C_Sim
     C_Python -- "HTTP POST Cmds<br/>(http://simulator:8080)" --> C_Sim
+```
+
+### C. State Machine Diagram (Automation Rule Lifecycle)
+
+This detailed state machine diagram illustrates the complete lifecycle of an `IF-THEN` automation rule. It tracks the logical progression of the rule starting from its creation in the Frontend Operator UI, through backend validation, up to its continuous evaluation and execution cycle within the Engine's memory.
+
+#### Key Architecture Takeaways:
+*   **1. Frontend Isolation (Drafting):** The `Drafting` state exists exclusively in the volatile memory of the React SPA (`newRule` state). The Backend Engine remains entirely unaware of the rule until the operator officially commits it over HTTP.
+*   **2. Edge Case Handling (Validation):** By implementing a `Validating` decision node, the architecture prevents corrupted rules from entering the active execution pool, bouncing the system back to the drafting state if required fields are missing.
+*   **3 & 4. The Continuous Evaluation Engine:** Once a rule reaches the `Active & Idle` state inside the Python Engine, it enters a high-frequency evaluation cycle (`Evaluating`). This transition is strictly event-driven: it only occurs when a new telemetry packet is routed via RabbitMQ, ensuring zero idle CPU consumption.
+*   **5. Non-Blocking Execution (Triggered):** When a rule condition evaluates to `True`, it shifts to the `Triggered` state and dispatches the execution command to the actuator. The rule instantaneously returns to `Idle` mode to await the next telemetry tick, decoupling logic evaluation from physical actuator response times.
+
+```mermaid
+---
+config:
+  theme: redux-dark
+---
+flowchart TD
+    %% Custom Styling
+    classDef startEnd fill:#10B981,stroke:#047857,stroke-width:2px,color:white
+    classDef reactUI fill:#1F2937,stroke:#3B82F6,stroke-width:2px,color:white
+    classDef backendApi fill:#4B5563,stroke:#9CA3AF,stroke-width:2px,color:white
+    classDef decision fill:#D97706,stroke:#B45309,stroke-width:2px,color:white
+    classDef execution fill:#DC2626,stroke:#991B1B,stroke-width:2px,color:white
+    classDef activeState fill:#166534,stroke:#22C55E,stroke-width:2px,color:white
+
+    %% Nodes Definitions
+    Start((Start)):::startEnd
+    Finish((End)):::startEnd
+    
+    Drafting["1. Drafting (In-Memory React)<br/><i>Operator selects: Sensor, Condition, Actuator</i>"]:::reactUI
+    Validating{"2. Backend Validation<br/><i>Are payload parameters valid?</i>"}:::decision
+    
+    ActiveIdle[("3. Active & Idle<br/><i>Saved in Engine Database</i>")]:::activeState
+    
+    Evaluating{"4. Evaluating Logic<br/><i>Does incoming Telemetry<br/>match the IF condition?</i>"}:::decision
+    
+    Triggered["5. Triggered State<br/><i>Asynchronous POST to Actuator</i>"]:::execution
+    Deleted["6. Deleted State<br/><i>Removed via DELETE API</i>"]:::backendApi
+
+    %% The Flow
+    Start -- "Operator opens Rule Builder" --> Drafting
+    
+    Drafting -- "Submits Form" --> Validating
+    Validating -- "Rejection (Error 400)" --> Drafting
+    Validating -. "Success (HTTP 200)" .-> ActiveIdle
+
+    %% The Engine Infinite Loop
+    ActiveIdle -- "New RabbitMQ Telemetry tick" --> Evaluating
+    
+    Evaluating -- "Condition NOT met (e.g. CO2 is Normal)" --> ActiveIdle
+    Evaluating -- "Condition MET (e.g. CO2 is High)" --> Triggered
+    
+    Triggered -. "Hardware command sent" .-> ActiveIdle
+    
+    %% Termination Flow
+    ActiveIdle -- "Operator presses Trash Bin icon" --> Deleted
+    Deleted --> Finish
 
